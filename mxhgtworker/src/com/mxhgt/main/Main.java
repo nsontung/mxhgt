@@ -4,6 +4,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+import com.mxhgt.thread.RabbitmqThread;
 import org.bson.Document;
 
 
@@ -19,29 +20,17 @@ import java.util.concurrent.TimeoutException;
  */
 public class Main {
 
-    private final static String QUEUE_NAME = "hello";
-
-    public static void main(String[] args) throws java.io.IOException, TimeoutException {
+    public static void main(String[] args) {
 
         System.out.println("Starting MXHGT worker...");
+
+        Thread t = new Thread(new RabbitmqThread());
+        t.start();
 
 //        MongoClient mongoClient = new MongoClient();
 //        MongoDatabase db = mongoClient.getDatabase("mxhgt");
 //        MongoCollection<org.bson.Document> c_posts = db.getCollection("c_post");
 
-
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
-        Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
-
-        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-        String message = "Hello World!";
-        channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
-        System.out.println(" [x] Sent '" + message + "'");
-
-        channel.close();
-        connection.close();
     }
 
 }
