@@ -1,5 +1,6 @@
 package com.mxhgt.main;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -7,12 +8,6 @@ import com.mongodb.client.MongoDatabase;
 import com.mxhgt.thread.RabbitmqThread;
 import org.bson.Document;
 
-
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.Channel;
-
-import java.util.concurrent.TimeoutException;
 
 
 /**
@@ -24,12 +19,19 @@ public class Main {
 
         System.out.println("Starting MXHGT worker...");
 
-        Thread t = new Thread(new RabbitmqThread());
-        t.start();
+//        Thread t = new Thread(new RabbitmqThread());
+//        t.start();
 
-//        MongoClient mongoClient = new MongoClient();
-//        MongoDatabase db = mongoClient.getDatabase("mxhgt");
-//        MongoCollection<org.bson.Document> c_posts = db.getCollection("c_post");
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+        MongoDatabase db = mongoClient.getDatabase("mxhgt");
+        MongoCollection<org.bson.Document> c_posts = db.getCollection("c_user");
+
+        Document obj = new Document();
+
+        obj.put("name", "tungns");
+        obj.put("age", "23");
+
+        c_posts.insertOne(obj);
 
     }
 
