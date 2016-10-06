@@ -1,13 +1,6 @@
 package com.mxhgt.main;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-
 import com.mxhgt.thread.RabbitmqThread;
-import org.bson.Document;
-
 
 
 /**
@@ -15,24 +8,21 @@ import org.bson.Document;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         System.out.println("Starting MXHGT worker...");
 
 //        Thread t = new Thread(new RabbitmqThread());
 //        t.start();
 
-        MongoClient mongoClient = new MongoClient("localhost", 27017);
-        MongoDatabase db = mongoClient.getDatabase("mxhgt");
-        MongoCollection<org.bson.Document> c_posts = db.getCollection("c_user");
+        Runnable r =  () -> {
+            System.out.println("Running nhe");
+        };
 
-        Document obj = new Document();
-
-        obj.put("name", "tungns");
-        obj.put("age", "23");
-
-        c_posts.insertOne(obj);
-
+        Thread t = new Thread(() -> {
+        });
+        t.run();
+        Thread.sleep(2000);
     }
 
 }
