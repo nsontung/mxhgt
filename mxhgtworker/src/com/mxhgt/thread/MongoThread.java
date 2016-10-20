@@ -10,6 +10,7 @@ import org.bson.Document;
  */
 public class MongoThread implements Runnable {
 
+
     @Override
     public void run() {
         MongoClient mongoClient = new MongoClient("localhost", 27017);

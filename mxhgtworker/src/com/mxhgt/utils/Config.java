@@ -6,9 +6,12 @@ package com.mxhgt.utils;
 public class Config {
 
     public static String MONGO_IP = "localhost";
-
     public static int MONGO_PORT = 2866;
 
-    public static String xx;
+
+    public static String RABBITMQ_IP = "localhost";
+
+
+
 
 }

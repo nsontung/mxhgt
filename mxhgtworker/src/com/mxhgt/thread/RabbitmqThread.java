@@ -6,6 +6,7 @@ import com.rabbitmq.client.ConnectionFactory;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 /**
@@ -15,10 +16,13 @@ public class RabbitmqThread implements Runnable {
 
     private final static Logger LOGGER = Logger.getLogger(RabbitmqThread.class.getName());
 
-    private final static String QUEUE_NAME = "hello";
 
-    public RabbitmqThread(){
+
+    private final static String QUEUE_NAME = "notification";
+
+    public RabbitmqThread() throws IOException {
         LOGGER.info("Starting RabbitmqThread...");
+        LOGGER.addHandler(new FileHandler("rabbit.log"));
     }
 
     @Override
