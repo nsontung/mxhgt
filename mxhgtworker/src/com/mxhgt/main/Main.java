@@ -2,6 +2,7 @@ package com.mxhgt.main;
 
 import com.mxhgt.thread.MongoThread;
 import com.mxhgt.thread.RabbitmqThread;
+import com.mxhgt.thread.RmqBenchmarkThread;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -25,8 +26,14 @@ public class Main {
 
         PropertyConfigurator.configure("./etc/log4j.properties");
         Logger logger = Logger.getLogger(Main.class);
+        logger.debug("MXHGT is starting...");
 
-        logger.debug("Hello");
+        Thread rbThread = new Thread(new RabbitmqThread());
+        rbThread.start();
+
+        Thread bmThread = new Thread(new RmqBenchmarkThread());
+        bmThread.start();
+
 
     }
 

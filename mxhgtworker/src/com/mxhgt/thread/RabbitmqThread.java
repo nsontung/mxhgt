@@ -1,55 +1,67 @@
 package com.mxhgt.thread;
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.*;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
+
 
 /**
  * Created by tungns on 10/4/16.
  */
 public class RabbitmqThread implements Runnable {
 
-    private final static Logger LOGGER = Logger.getLogger(RabbitmqThread.class.getName());
+    private final static Logger logger = Logger.getLogger(RabbitmqThread.class);
 
 
 
     private final static String QUEUE_NAME = "notification";
 
     public RabbitmqThread() throws IOException {
-        LOGGER.info("Starting RabbitmqThread...");
-        LOGGER.addHandler(new FileHandler("rabbit.log"));
+        logger.info("Starting RabbitmqThread...");
+
     }
 
     @Override
     public void run()  {
-        LOGGER.info("Running RabbitmqThread...");
+        logger.info("Running RabbitmqThread...");
+
 
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
-        Channel channel = null;
-
+        Connection connection = null;
         try {
-            Connection connection = factory.newConnection();
-            channel = connection.createChannel();
-
+            connection = factory.newConnection();
+            Channel channel = connection.createChannel();
             channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-            String message = "Hello World!";
-            channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
-            System.out.println(" [x] Sent '" + message + "'");
+            logger.debug(" [*] Waiting for messages. To exit press CTRL+C");
 
-            channel.close();
-            connection.close();
+
+            Consumer consumer = new DefaultConsumer(channel) {
+
+                private  int  receivedCount = 0;
+
+                @Override
+                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
+                        throws IOException {
+                    String message = new String(body, "UTF-8");
+                    logger.debug(" [x] Received " + receivedCount++ + ": '" + message + "'");
+
+                }
+            };
+            channel.basicConsume(QUEUE_NAME, true, consumer);
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (TimeoutException e) {
             e.printStackTrace();
         }
+
+
+
+
+
 
     }
 }
