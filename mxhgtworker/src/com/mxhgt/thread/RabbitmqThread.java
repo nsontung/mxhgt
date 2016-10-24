@@ -2,6 +2,7 @@ package com.mxhgt.thread;
 
 import com.rabbitmq.client.*;
 import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -37,6 +38,7 @@ public class RabbitmqThread implements Runnable {
             channel.queueDeclare(QUEUE_NAME, false, false, false, null);
             logger.debug(" [*] Waiting for messages. To exit press CTRL+C");
 
+            long startTime = System.currentTimeMillis();
 
             Consumer consumer = new DefaultConsumer(channel) {
 
@@ -48,6 +50,11 @@ public class RabbitmqThread implements Runnable {
                     String message = new String(body, "UTF-8");
                     logger.debug(" [x] Received " + receivedCount++ + ": '" + message + "'");
 
+                    if(receivedCount == RmqBenchmarkThread.MESSAGE_NUMBER) {
+
+                        logger.info("Total time: " + (System.currentTimeMillis() - startTime) + "ms");
+                    }
+
                 }
             };
             channel.basicConsume(QUEUE_NAME, true, consumer);
@@ -57,10 +64,6 @@ public class RabbitmqThread implements Runnable {
         } catch (TimeoutException e) {
             e.printStackTrace();
         }
-
-
-
-
 
 
     }

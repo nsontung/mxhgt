@@ -15,7 +15,7 @@ public class RmqBenchmarkThread implements Runnable {
 
     private final String QUEUE_NAME = "notification";
 
-    private int MESSAGE_NUMBER = 1000;
+    public final static int MESSAGE_NUMBER = 100000;
 
     private Logger logger = Logger.getLogger(RmqBenchmarkThread.class);
     @Override
