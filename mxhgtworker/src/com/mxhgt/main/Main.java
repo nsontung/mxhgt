@@ -1,5 +1,6 @@
 package com.mxhgt.main;
 
+import com.mxhgt.controller.App;
 import com.mxhgt.thread.MongoThread;
 import com.mxhgt.thread.RabbitmqThread;
 import com.mxhgt.thread.RmqBenchmarkThread;
@@ -28,11 +29,14 @@ public class Main {
         Logger logger = Logger.getLogger(Main.class);
         logger.debug("MXHGT is starting...");
 
-        Thread rbThread = new Thread(new RabbitmqThread());
-        rbThread.start();
+//        Thread rbThread = new Thread(new RabbitmqThread());
+//        rbThread.start();
+//
+//        Thread bmThread = new Thread(new RmqBenchmarkThread());
+//        bmThread.start();
 
-        Thread bmThread = new Thread(new RmqBenchmarkThread());
-        bmThread.start();
+
+        App.instance();
 
 
     }

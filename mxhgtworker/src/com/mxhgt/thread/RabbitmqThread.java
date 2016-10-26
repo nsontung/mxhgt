@@ -11,15 +11,15 @@ import java.util.concurrent.TimeoutException;
 /**
  * Created by tungns on 10/4/16.
  */
-public class RabbitmqThread implements Runnable {
+public class RabbitmqThread extends Thread {
 
-    private final static Logger logger = Logger.getLogger(RabbitmqThread.class);
+    private final Logger logger = Logger.getLogger(RabbitmqThread.class);
 
 
 
     private final static String QUEUE_NAME = "notification";
 
-    public RabbitmqThread() throws IOException {
+    public RabbitmqThread() {
         logger.info("Starting RabbitmqThread...");
 
     }
@@ -50,11 +50,13 @@ public class RabbitmqThread implements Runnable {
                     String message = new String(body, "UTF-8");
                     logger.debug(" [x] Received " + receivedCount++ + ": '" + message + "'");
 
+
+
+
                     if(receivedCount == RmqBenchmarkThread.MESSAGE_NUMBER) {
 
                         logger.info("Total time: " + (System.currentTimeMillis() - startTime) + "ms");
                     }
-
                 }
             };
             channel.basicConsume(QUEUE_NAME, true, consumer);

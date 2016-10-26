@@ -11,7 +11,7 @@ import java.util.concurrent.TimeoutException;
 /**
  * Created by tungns on 10/21/16.
  */
-public class RmqBenchmarkThread implements Runnable {
+public class RmqBenchmarkThread extends Thread {
 
     private final String QUEUE_NAME = "notification";
 

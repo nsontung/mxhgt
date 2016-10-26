@@ -3,12 +3,20 @@ package com.mxhgt.thread;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.apache.log4j.Logger;
 import org.bson.Document;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * Created by tungns on 10/6/16.
  */
-public class MongoThread implements Runnable {
+public class MongoThread extends Thread {
+
+    private Logger logger = Logger.getLogger(MongoThread.class);
+
+    BlockingQueue<String> queue = new LinkedBlockingDeque<>();
 
 
     @Override
@@ -17,12 +25,28 @@ public class MongoThread implements Runnable {
         MongoDatabase db = mongoClient.getDatabase("mxhgt");
         MongoCollection<Document> c_posts = db.getCollection("c_user");
 
-        Document obj = new Document();
+        while(true)
+        {
+            try {
+                String s = queue.take();
 
-        obj.put("name", "tungns");
-        obj.put("age", "23");
+                Document obj = new Document();
 
-        c_posts.insertOne(obj);
+                obj.put("message", s);
+
+                c_posts.insertOne(obj);
+            } catch (InterruptedException e) {
+                logger.warn(e.getMessage(), e);
+            }
+        }
+    }
+
+    public void put(String input) {
+        try {
+            queue.put(input);
+        } catch (InterruptedException e) {
+            logger.warn(e.getMessage(), e);
+        }
     }
 
 
