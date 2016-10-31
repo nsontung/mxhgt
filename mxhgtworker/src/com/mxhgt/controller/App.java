@@ -43,7 +43,7 @@ public class App {
     public void stop(){
         mongoThread.interrupt();
         rabbitmqThread.interrupt();
-        rmqBenchmarkThread
+        rmqBenchmarkThread.interrupt();
     }
 
     public void addMongoMessage(String message){

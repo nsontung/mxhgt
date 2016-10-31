@@ -51,8 +51,6 @@ public class RabbitmqThread extends Thread {
                     logger.debug(" [x] Received " + receivedCount++ + ": '" + message + "'");
 
 
-
-
                     if(receivedCount == RmqBenchmarkThread.MESSAGE_NUMBER) {
 
                         logger.info("Total time: " + (System.currentTimeMillis() - startTime) + "ms");
@@ -66,7 +64,6 @@ public class RabbitmqThread extends Thread {
         } catch (TimeoutException e) {
             e.printStackTrace();
         }
-
 
     }
 }

@@ -3,6 +3,7 @@ package com.mxhgt.thread;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mxhgt.utils.Config;
 import org.apache.log4j.Logger;
 import org.bson.Document;
 
@@ -21,7 +22,8 @@ public class MongoThread extends Thread {
 
     @Override
     public void run() {
-        MongoClient mongoClient = new MongoClient("localhost", 27017);
+
+        MongoClient mongoClient = new MongoClient(Config.MONGO_IP, Config.MONGO_PORT);
         MongoDatabase db = mongoClient.getDatabase("mxhgt");
         MongoCollection<Document> c_posts = db.getCollection("c_user");
 
@@ -48,7 +50,6 @@ public class MongoThread extends Thread {
             logger.warn(e.getMessage(), e);
         }
     }
-
 
 
 }

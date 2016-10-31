@@ -36,7 +36,7 @@ public class Main {
 //        bmThread.start();
 
 
-        App.instance();
+        App.instance().start();
 
 
     }
