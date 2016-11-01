@@ -25,8 +25,9 @@ public class MongoThread extends Thread {
 
         MongoClient mongoClient = new MongoClient(Config.MONGO_IP, Config.MONGO_PORT);
         MongoDatabase db = mongoClient.getDatabase("mxhgt");
-        MongoCollection<Document> c_posts = db.getCollection("c_user");
+        MongoCollection<Document> c_posts = db.getCollection("c_post");
 
+        int counter = 0;
         while(true)
         {
             try {
@@ -37,6 +38,7 @@ public class MongoThread extends Thread {
                 obj.put("message", s);
 
                 c_posts.insertOne(obj);
+                logger.debug("Inserted post: " + counter++ );
             } catch (InterruptedException e) {
                 logger.warn(e.getMessage(), e);
             }

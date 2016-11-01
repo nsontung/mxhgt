@@ -1,5 +1,6 @@
 package com.mxhgt.thread;
 
+import com.mxhgt.utils.Config;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -22,7 +23,7 @@ public class RmqBenchmarkThread extends Thread {
     public void run() {
 
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
+        factory.setHost(Config.RABBITMQ_IP);
 
         Channel channel = null;
 
@@ -37,6 +38,7 @@ public class RmqBenchmarkThread extends Thread {
                 String message = "Hello " + i ;
                 channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
                 logger.debug(" [x] Sent " + i + ": '" + message + "'");
+
             }
 
             channel.close();

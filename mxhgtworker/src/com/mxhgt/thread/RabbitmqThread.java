@@ -1,5 +1,7 @@
 package com.mxhgt.thread;
 
+import com.mxhgt.controller.App;
+import com.mxhgt.utils.Config;
 import com.rabbitmq.client.*;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggerFactory;
@@ -26,11 +28,12 @@ public class RabbitmqThread extends Thread {
 
     @Override
     public void run()  {
+
         logger.info("Running RabbitmqThread...");
 
 
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
+        factory.setHost(Config.RABBITMQ_IP);
         Connection connection = null;
         try {
             connection = factory.newConnection();
@@ -51,12 +54,18 @@ public class RabbitmqThread extends Thread {
                     logger.debug(" [x] Received " + receivedCount++ + ": '" + message + "'");
 
 
+                    App.instance().addMongoMessage(message);
+
+
                     if(receivedCount == RmqBenchmarkThread.MESSAGE_NUMBER) {
 
                         logger.info("Total time: " + (System.currentTimeMillis() - startTime) + "ms");
                     }
                 }
             };
+
+
+
             channel.basicConsume(QUEUE_NAME, true, consumer);
 
         } catch (IOException e) {
